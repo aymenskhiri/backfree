@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FreelancerProfileController;
 
 
-
+//freelancer
 Route::apiResource('freelancer-profiles', FreelancerProfileController::class);
 Route::get('/freelancer-profiles/{freelancerProfile}', [FreelancerProfileController::class, 'show']);
 Route::put('/freelancer-profiles/{freelancerProfile}', [FreelancerProfileController::class, 'update']);
@@ -15,7 +15,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/posts', [\App\Http\Controllers\PostController::class, 'index']);
+Route::post('/posts', [\App\Http\Controllers\PostController::class, 'store']);
+Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show']);
+Route::put('/posts/{post}', [\App\Http\Controllers\PostController::class, 'update']);
+Route::delete('/posts/{post}', [\App\Http\Controllers\PostController::class, 'destroy']);
 
+
+//auth
 Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])
     ->middleware('guest')
     ->name('register');

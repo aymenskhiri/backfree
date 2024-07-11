@@ -18,9 +18,7 @@ class FreelancerProfile extends Model
         'reviews',
     ];
 
-    /**
-     * Get the user that owns the freelancer profile.
-     */
+
     public function user()
     {
         return $this->belongsTo(User::class);
