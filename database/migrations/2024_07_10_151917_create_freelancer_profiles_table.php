@@ -13,8 +13,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('bio')->nullable();
-            $table->text('competences')->nullable();
-            $table->decimal('tarif_horaires', 8, 2)->nullable();
+            $table->text('skills')->nullable();
+            $table->decimal('hourly_price', 8, 2)->nullable();
             $table->integer('reviews')->default(0);
             $table->timestamps();
         });

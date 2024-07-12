@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 
 class RegisteredUserController extends Controller
 {
@@ -18,17 +18,9 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): Response
+    public function register(RegisterRequest $request): \Illuminate\Http\JsonResponse
     {
-        $request->validate([
-            'first_name' => 'required|string|max:' . config('constants.string_max'),
-            'last_name' => 'required|string|max:' . config('constants.string_max'),
-            'phone' => 'required|string|max:' . config('constants.string_max'),
-            'role' => 'required|string|max:' . config('constants.string_max'),
-            'email' => 'required|string|lowercase|email|max:' . config('constants.string_max') . '|unique:' . User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-
+        try {
         $user = User::create([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -42,6 +34,13 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return response('User created successfully', 200);
+            return response()->json([
+                'message' => trans('messages.user_created'),
+                'user' => $user,
+            ], \Symfony\Component\HttpFoundation\Response::HTTP_OK);
+        } catch (\Exception $e) {
+            Log::error('User registration failed: ' . $e->getMessage());
+            return response()->json(['error' => trans('messages.user_creation_failed')], \Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST);
+        }
     }
 }
