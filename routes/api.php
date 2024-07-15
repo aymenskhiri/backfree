@@ -44,3 +44,4 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         ->name('logout');
 });
 
+Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
