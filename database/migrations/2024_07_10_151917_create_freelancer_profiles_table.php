@@ -11,7 +11,7 @@ return new class extends Migration
     {
         Schema::create('freelancer_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(\App\Models\User::class ,'user_id')->constrained()->cascadeOnDelete();
             $table->text('bio')->nullable();
             $table->text('skills')->nullable();
             $table->decimal('hourly_price', 8, 2)->nullable();
@@ -24,5 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('freelancer_profiles');
+        Schema::dropIfExists('users');
+
     }
 };

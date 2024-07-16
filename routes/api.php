@@ -45,3 +45,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
+
+
+Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store']);
+Route::get('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'show']);
+Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update']);
+Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'destroy']);
