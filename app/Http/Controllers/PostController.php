@@ -35,9 +35,18 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function getPostsByFreelancer($freelancerId): JsonResponse
+    {
+        try {
+            $posts = Post::where('freelancer_profile_id', $freelancerId)->get();
+            return response()->json($posts);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve posts for freelancer: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to retrieve posts'], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
     public function show(Post $post): JsonResponse
     {
         return response()->json($post);

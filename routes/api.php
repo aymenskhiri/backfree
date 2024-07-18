@@ -20,6 +20,8 @@ Route::post('/posts', [\App\Http\Controllers\PostController::class, 'store']);
 Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show']);
 Route::put('/posts/{post}', [\App\Http\Controllers\PostController::class, 'update']);
 Route::delete('/posts/{post}', [\App\Http\Controllers\PostController::class, 'destroy']);
+Route::get('/freelancers/{freelancerId}/posts', [\App\Http\Controllers\PostController::class, 'getPostsByFreelancer']);
+
 
 
 //auth
@@ -46,8 +48,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
 
-
+// Client
 Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store']);
 Route::get('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'show']);
 Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update']);
 Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'destroy']);
+
+
+
+
+Route::middleware('api')->get('/csrf-token', function (Request $request) {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+
