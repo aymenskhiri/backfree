@@ -25,7 +25,9 @@ class PostRequest extends FormRequest
                 'freelancer_profile_id' => 'required|exists:freelancer_profiles,id',
                 'title' => 'required|string|max:' . config('constants.string_max'),
                 'description' => 'required|string',
-            
+                'image' => 'nullable|image|mimes:jpg,png,jpeg,gif',
+
+
         ];
     }
 }

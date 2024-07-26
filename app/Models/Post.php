@@ -12,9 +12,11 @@ class Post extends Model
         'freelancer_profile_id',
          'title',
          'description',
+         'image',
 ];
 
-    public function freelancerProfile(){
-        return $this->belongsTo(FreelancerProfile::class);
+    public function freelancerProfile()
+    {
+        return $this->belongsTo(FreelancerProfile::class, 'freelancer_profile_id');
     }
 }

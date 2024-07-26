@@ -61,3 +61,9 @@ Route::middleware('api')->get('/csrf-token', function (Request $request) {
     return response()->json(['csrf_token' => csrf_token()]);
 });
 
+
+
+
+
+Route::apiResource('demands', \App\Http\Controllers\DemandController::class);
+

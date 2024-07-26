@@ -25,10 +25,16 @@ class AuthenticatedSessionController extends Controller
             $user = $request->user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
+            // Retrieve related data
+            $client = $user->client;
+            $freelancerProfile = $user->freelancerProfile;
+
             return response()->json([
                 'message' => trans('messages.login_success'),
                 'token' => $token,
-                'user' => $user
+                'user' => $user,
+                'client_id' => $client ? $client->id : null,
+                'freelancer_id' => $freelancerProfile ? $freelancerProfile->id : null,
             ], \Symfony\Component\HttpFoundation\Response::HTTP_OK);
         } catch (ValidationException $e) {
             Log::error('Login attempt failed: ' . $e->getMessage());

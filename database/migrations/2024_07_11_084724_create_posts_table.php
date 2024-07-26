@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('freelancer_profile_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

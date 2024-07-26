@@ -26,8 +26,18 @@ class User extends Authenticatable
         'role',
         'email',
         'password',
+        'client_id',
+        'freelancer_id',
     ];
 
+
+    public function getClientIdAttribute() {
+        return $this->attributes['client_id'] ?? null;
+    }
+
+    public function getFreelancerIdAttribute() {
+        return $this->attributes['freelancer_id'] ?? null;
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -54,4 +64,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(FreelancerProfile::class);
     }
+
+
+    public function client()
+    {
+        return $this->hasOne(Client::class);
+    }
+
 }
