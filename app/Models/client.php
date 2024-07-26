@@ -1,23 +1,20 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FreelancerProfile extends Model
+class client extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['user_id', 'demands_history'];
 
-    protected $fillable = [
-        'user_id',
-        'bio',
-        'skills',
-        'hourly_price',
-        'reviews',
+    protected $casts = [
+        'demands_history' => 'array',
     ];
-
 
     public function user()
     {

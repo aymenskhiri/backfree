@@ -2,63 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FreelancerRequest;
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
-
-    public function index(): Response
+    public function index(): JsonResponse
     {
         $posts = Post::all();
-        return response($posts);
+        return response()->json($posts);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Response
+    public function store(PostRequest $request): JsonResponse
     {
-        $request->validate([
-
-            'freelancer_profile_id' => 'required|exists:freelancer_profiles,id',
-            'title' => 'required|string|max:' . config('constants.string_max'),
-            'description' => 'required|string',
-        ]);
-
-        $post = Post::create($request->only(['freelancer_profile_id', 'title', 'description']));
-
-        return response($post, 201);
+        try {
+            $post = Post::create($request->only(['freelancer_profile_id', 'title', 'description']));
+            return response()->json([
+                'message' => trans('messages.post_created'),
+                'post' => $post,
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            Log::error('Post creation failed: ' . $e->getMessage());
+            return response()->json(['error' => trans('messages.post_creation_failed')], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Post $post): Response
+    public function show(Post $post): JsonResponse
     {
-        return response($post);
+        return response()->json($post);
     }
 
-
-    public function update(Request $request, Post $post): Response
+    public function update(FreelancerRequest $request, Post $post): JsonResponse
     {
-        $request->validate([
-            'title' => 'required|string|max:' . config('constants.string_max'),
-            'description' => 'required|string|max:' . config('constants.string_max'),
 
-        ]);
-
-        $post->update($request->only(['title', 'description']));
-
-        return response($post);
+        try {
+            $post->update($request->only(['title', 'description']));
+            return response()->json([
+                'message' => trans('messages.post_updated'),
+                'post' => $post,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Post update failed: ' . $e->getMessage());
+            return response()->json(['error' => trans('messages.post_update_failed')], Response::HTTP_BAD_REQUEST);
+        }
     }
 
-
-    public function destroy(Post $post): Response
+    public function destroy(Post $post): JsonResponse
     {
-        $post->delete();
-
-        return response()->noContent();
+        try {
+            $post->delete();
+            return response()->json([
+                'message' => trans('messages.post_deleted'),
+            ], Response::HTTP_NO_CONTENT);
+        } catch (\Exception $e) {
+            Log::error('Post deletion failed: ' . $e->getMessage());
+            return response()->json(['error' => trans('messages.post_deletion_failed')], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

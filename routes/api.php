@@ -23,11 +23,11 @@ Route::delete('/posts/{post}', [\App\Http\Controllers\PostController::class, 'de
 
 
 //auth
-Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'store'])
+Route::post('/register', [\App\Http\Controllers\Auth\RegisteredUserController::class, 'register'])
     ->middleware('guest')
     ->name('register');
 
-Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'store'])
+Route::post('/login', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'login'])
     ->middleware('guest')
     ->name('login');
 
@@ -40,7 +40,14 @@ Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController
     ->name('password.store');
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'destroy'])
+    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'logout'])
         ->name('logout');
 });
 
+Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
+
+
+Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store']);
+Route::get('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'show']);
+Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update']);
+Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'destroy']);
