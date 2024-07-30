@@ -20,6 +20,8 @@ Route::post('/posts', [\App\Http\Controllers\PostController::class, 'store']);
 Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show']);
 Route::put('/posts/{post}', [\App\Http\Controllers\PostController::class, 'update']);
 Route::delete('/posts/{post}', [\App\Http\Controllers\PostController::class, 'destroy']);
+Route::get('/freelancers/{freelancerId}/posts', [\App\Http\Controllers\PostController::class, 'getPostsByFreelancer']);
+
 
 
 //auth
@@ -38,16 +40,29 @@ Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkCon
 Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
     ->middleware('guest')
     ->name('password.store');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'logout'])
-        ->name('logout');
+Route::middleware('api')->get('/csrf-token', function (Request $request) {
+    return response()->json(['csrf_token' => csrf_token()]);
 });
+Route::middleware('api')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'logout']);
 
-Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
 
 
+Route::resource('service-demands', \App\Http\Controllers\DemandController::class)->middleware('auth:sanctum');
+
+// Client
 Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store']);
 Route::get('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'show']);
 Route::put('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'update']);
 Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::class, 'destroy']);
+
+
+
+
+
+
+
+
+
+
+Route::apiResource('demands', \App\Http\Controllers\DemandController::class);
+

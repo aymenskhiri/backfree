@@ -35,14 +35,13 @@ class RegisteredUserController extends Controller
 
             Auth::login($user);
 
-            // Initialize messages array
             $messages = [trans('messages.user_created')];
 
-            // If the user role is 'client', create a client account
+
             if ($user->role === 'client') {
                 Client::create([
                     'user_id' => $user->id,
-                    'demands_history' => [], // Initialize with empty array
+                    'demands_history' => [],
                 ]);
                 $messages[] = trans('messages.client_created_successfully');
             }

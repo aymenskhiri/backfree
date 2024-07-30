@@ -21,10 +21,9 @@ class ClientController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $client = Client::create([
-                'user_id' => $validatedData['user_id'],
-                'demands_history' => $validatedData['demands_history'] ?? null,
-            ]);
+            //repo
+            $arr = $this->getArrAttStoreClient($validatedData);
+            $client = Client::create($arr);
 
             return response()->json([
                 'message' => trans('messages.client_created_successfully'),
@@ -87,10 +86,23 @@ class ClientController extends Controller
 
             return response()->json([
                 'message' => trans('messages.client_deleted_successfully')
-            ], Response::HTTP_NO_CONTENT);
+            ], Response::HTTP_OK);
         } catch (\Exception $e) {
             Log::error('Client deletion failed: ' . $e->getMessage());
             return response()->json(['error' => trans('messages.client_deletion_failed')], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    /**
+     * @param mixed $validatedData
+     * @return array
+     */
+    public function getArrAttStoreClient(mixed $validatedData): array
+    {
+        $arr = [
+            'user_id' => $validatedData['user_id'],
+            'demands_history' => $validatedData['demands_history'] ?? null,
+        ];
+        return $arr;
     }
 }
