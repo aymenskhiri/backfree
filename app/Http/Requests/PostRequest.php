@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostRequest extends FormRequest
@@ -17,7 +18,7 @@ class PostRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array|string>
      */
     public function rules(): array
     {
@@ -26,8 +27,6 @@ class PostRequest extends FormRequest
                 'title' => 'required|string|max:' . config('constants.string_max'),
                 'description' => 'required|string',
                 'image' => 'nullable|image|mimes:jpg,png,jpeg,gif',
-
-
         ];
     }
 }

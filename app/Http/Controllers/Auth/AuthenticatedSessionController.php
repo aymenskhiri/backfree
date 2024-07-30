@@ -25,7 +25,6 @@ class AuthenticatedSessionController extends Controller
             $user = $request->user();
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            // Retrieve related data
             $client = $user->client;
             $freelancerProfile = $user->freelancerProfile;
 
@@ -92,14 +91,16 @@ class AuthenticatedSessionController extends Controller
 
 
 
-    public function logout(Request $request): Response
+    public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
+        // Ensure user is authenticated and token exists
+        if ($request->user()) {
+            $request->user()->currentAccessToken()->delete();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return response()->noContent();
+        return response()->json(['message' => 'Logged out successfully']);
     }
+
 }

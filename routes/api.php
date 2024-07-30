@@ -40,13 +40,14 @@ Route::post('/forgot-password', [\App\Http\Controllers\Auth\PasswordResetLinkCon
 Route::post('/reset-password', [\App\Http\Controllers\Auth\NewPasswordController::class, 'store'])
     ->middleware('guest')
     ->name('password.store');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'logout'])
-        ->name('logout');
+Route::middleware('api')->get('/csrf-token', function (Request $request) {
+    return response()->json(['csrf_token' => csrf_token()]);
 });
+Route::middleware('api')->post('/logout', [\App\Http\Controllers\Auth\AuthenticatedSessionController::class, 'logout']);
 
-Route::resource('service-demands', \App\Http\Controllers\ServiceDemandController::class)->middleware('auth:sanctum');
+
+
+Route::resource('service-demands', \App\Http\Controllers\DemandController::class)->middleware('auth:sanctum');
 
 // Client
 Route::post('/clients', [\App\Http\Controllers\ClientController::class, 'store']);
@@ -57,9 +58,7 @@ Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::clas
 
 
 
-Route::middleware('api')->get('/csrf-token', function (Request $request) {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
+
 
 
 

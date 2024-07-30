@@ -15,7 +15,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with(['freelancerProfile.user'])->get(); // Assuming a 'user' relationship on 'freelancerProfile'
+        $posts = Post::with(['freelancerProfile.user'])->get();
         return response()->json($posts);
     }
 
@@ -36,18 +36,17 @@ class PostController extends Controller
                 'image' => $imagePath,
             ]);
 
-            // Load the freelancer_profile relationship
             $post->load('freelancer_profile');
 
             return response()->json([
-                'message' => 'Post created successfully',
+                'message' => trans('messages.post_created'),
                 'post' => $post,
-            ], 201);
+            ],Response::HTTP_OK);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'Post creation failed',
+                'message' => trans('messages.post_creation_failed'),
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -74,7 +73,7 @@ class PostController extends Controller
                     Storage::delete('public/images/' . $imagePath);
                 }
                 $imagePath = $request->file('image')->store('public/images');
-                $imagePath = basename($imagePath); // Get only the filename
+                $imagePath = basename($imagePath);
             }
 
             // Update the post
@@ -95,7 +94,7 @@ class PostController extends Controller
             return response()->json([
                 'message' => 'Post update failed',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -119,7 +118,7 @@ class PostController extends Controller
             return response()->json([
                 'message' => 'Post deletion failed',
                 'error' => $e->getMessage(),
-            ], 500);
+            ], Response::HTTP_NOT_FOUND);
         }
     }
 }
