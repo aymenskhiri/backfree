@@ -11,6 +11,7 @@ class Demand extends Model
 
     protected $fillable = [
         'status',
+        'approuval',
         'service_date',
         'description',
         'post_id',

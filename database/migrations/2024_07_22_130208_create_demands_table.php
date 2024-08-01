@@ -11,6 +11,7 @@ class CreateDemandsTable extends Migration
         Schema::create('demands', function (Blueprint $table) {
             $table->id();
             $table->string('status');
+            $table->string('approuval')->default('On Hold');
             $table->date('service_date');
             $table->text('description');
             $table->foreignId('post_id')->constrained()->onDelete('cascade');

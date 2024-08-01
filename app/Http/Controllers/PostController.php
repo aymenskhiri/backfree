@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\FreelancerProfile;
 use App\Models\Post;
+use App\Repository\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PostController extends Controller
 {
+
+    private $postRepository;
+
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
     public function index()
     {
         $posts = Post::with(['freelancerProfile.user'])->get();
@@ -22,19 +30,15 @@ class PostController extends Controller
     public function store(PostRequest $request): JsonResponse
     {
         try {
-            // Handle the image upload
             $imagePath = null;
             if ($request->hasFile('image')) {
                 $imagePath = $request->file('image')->store('public/images');
-                $imagePath = basename($imagePath); // Get only the filename
+                $imagePath = basename($imagePath);
             }
 
-            $post = Post::create([
-                'freelancer_profile_id' => $request->input('freelancer_profile_id'),
-                'title' => $request->input('title'),
-                'description' => $request->input('description'),
-                'image' => $imagePath,
-            ]);
+            $postData = $this->postRepository->preparePostData($request, $imagePath);
+            $post = Post::create($postData);
+
 
             $post->load('freelancer_profile');
 
@@ -76,7 +80,6 @@ class PostController extends Controller
                 $imagePath = basename($imagePath);
             }
 
-            // Update the post
             $post->update([
                 'freelancer_profile_id' => $request->input('freelancer_profile_id'),
                 'title' => $request->input('title'),
