@@ -33,6 +33,8 @@ return [
     'service_demand_deleted' => 'Service demand deleted successfully.',
     'service_demand_deletion_failed' => 'Service demand deletion failed. Please try again later.',
 
+    'status_updated' => 'Status updated successfully',
+
 
     'client_created_successfully' => 'Client account created successfully.',
     'client_creation_failed' => 'Client account creation failed.',
@@ -40,5 +42,7 @@ return [
     'client_update_failed' => 'Client account update failed.',
     'client_deleted_successfully' => 'Client account deleted successfully.',
     'client_deletion_failed' => 'Client account deletion failed.',
+
+
 ];
 

@@ -62,7 +62,13 @@ Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::clas
 
 
 
-
+//demands
 
 Route::apiResource('demands', \App\Http\Controllers\DemandController::class);
+Route::get('/freelancers/{freelancerId}/demands', [\App\Http\Controllers\DemandController::class, 'getDemandsByFreelancer']);
+Route::get('/freelancers/{freelancerId}/demands/approved', [\App\Http\Controllers\DemandController::class, 'getDemandsByFreelancerApprouved']);
+
+Route::patch('demands/{id}/status', [\App\Http\Controllers\DemandController::class, 'updateStatus']);
+Route::patch('/demands/{id}/approuval', [\App\Http\Controllers\DemandController::class, 'updateApprouval']);
+
 

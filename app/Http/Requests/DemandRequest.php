@@ -24,8 +24,13 @@ class DemandRequest extends FormRequest
     {
         return [
             'status' => [
-                'max:' . config('constants.string_max'),
-                Rule::in(['Done', 'Progressing', 'Rejected', 'On Hold'])
+                'required',
+                'string',
+                Rule::in(['Done', 'Progressing', 'On Hold']),
+            ],
+            'approuval' => [
+                'string',
+                Rule::in(['Accepted','Rejected', 'On Hold']),
             ],
             'service_date' => 'required|date',
             'description' => 'required|string|max:' . config('constants.string_max'),
