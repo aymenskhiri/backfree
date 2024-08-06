@@ -57,6 +57,7 @@ class DemandController extends Controller
             return response()->json(['error' => 'Failed to retrieve demands'], Response::HTTP_BAD_REQUEST);
         }
     }
+
     public function show($id): JsonResponse
     {
         $demand = Demand::findOrFail($id);
@@ -109,7 +110,6 @@ class DemandController extends Controller
 
     public function updateApprouval(Request $request, $id): JsonResponse
     {
-        // Validate the request
         $validator = Validator::make($request->all(), [
             'approuval' => [
                 'required',

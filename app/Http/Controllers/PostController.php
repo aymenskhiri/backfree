@@ -54,10 +54,11 @@ class PostController extends Controller
         }
     }
 
+
     public function getPostsByFreelancer($freelancerId): JsonResponse
     {
         try {
-            $posts = Post::where('freelancer_profile_id', $freelancerId)->get();
+            $posts = Post::byFreelancer($freelancerId)->get();
             return response()->json($posts);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve posts for freelancer: ' . $e->getMessage());

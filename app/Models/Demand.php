@@ -17,6 +17,7 @@ class Demand extends Model
         'post_id',
         'freelancer_id',
         'client_id',
+        'begin_hour',
     ];
 
     public function client()

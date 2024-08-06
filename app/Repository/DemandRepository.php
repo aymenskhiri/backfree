@@ -14,6 +14,8 @@ class DemandRepository
             'post_id' => $request->input('post_id'),
             'freelancer_id' => $request->input('freelancer_id'),
             'client_id' => $request->input('client_id'),
+            'begin_hour' => $request->input('begin_hour'),
+
         ];
     }
 }

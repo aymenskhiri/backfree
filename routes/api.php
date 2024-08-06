@@ -20,7 +20,7 @@ Route::post('/posts', [\App\Http\Controllers\PostController::class, 'store']);
 Route::get('/posts/{post}', [\App\Http\Controllers\PostController::class, 'show']);
 Route::put('/posts/{post}', [\App\Http\Controllers\PostController::class, 'update']);
 Route::delete('/posts/{post}', [\App\Http\Controllers\PostController::class, 'destroy']);
-Route::get('/freelancers/{freelancerId}/posts', [\App\Http\Controllers\PostController::class, 'getPostsByFreelancer']);
+Route::get('/posts/freelancer/{id}', [\App\Http\Controllers\PostController::class, 'getPostsByFreelancer']);
 
 
 
@@ -67,7 +67,7 @@ Route::delete('/clients/{client}', [\App\Http\Controllers\ClientController::clas
 Route::apiResource('demands', \App\Http\Controllers\DemandController::class);
 Route::get('/freelancers/{freelancerId}/demands', [\App\Http\Controllers\DemandController::class, 'getDemandsByFreelancer']);
 Route::get('/freelancers/{freelancerId}/demands/approved', [\App\Http\Controllers\DemandController::class, 'getDemandsByFreelancerApprouved']);
-
+Route::get('/clients/{clientId}/demands', [\App\Http\Controllers\DemandController::class, 'getDemandsByClient']);
 Route::patch('demands/{id}/status', [\App\Http\Controllers\DemandController::class, 'updateStatus']);
 Route::patch('/demands/{id}/approuval', [\App\Http\Controllers\DemandController::class, 'updateApprouval']);
 

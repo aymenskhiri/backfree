@@ -37,6 +37,7 @@ class DemandRequest extends FormRequest
             'post_id' => 'required|exists:posts,id',
             'freelancer_id' => 'required|exists:freelancer_profiles,id',
             'client_id' => 'required|exists:clients,id',
+            'begin_hour' => 'required|date_format:H:i',
         ];
     }
 }

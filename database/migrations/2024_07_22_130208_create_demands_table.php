@@ -14,6 +14,7 @@ class CreateDemandsTable extends Migration
             $table->string('approuval')->default('On Hold');
             $table->date('service_date');
             $table->text('description');
+            $table->time('begin_hour');
             $table->foreignId('post_id')->constrained()->onDelete('cascade');
             $table->foreignId('freelancer_id')->constrained('freelancer_profiles')->onDelete('cascade');
             $table->foreignId('client_id')->constrained()->onDelete('cascade');

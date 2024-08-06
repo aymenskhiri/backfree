@@ -4,6 +4,8 @@ return [
     'login_success' => 'User logged in successfully',
     'invalid_credentials' => 'Invalid credentials - authentication failed',
     'login_failed' => 'Login failed. Please try again later.',
+    'logout_success' => 'Logged out successfully',
+
 
 
     'user_created' => 'User created successfully',

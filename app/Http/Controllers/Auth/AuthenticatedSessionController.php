@@ -93,14 +93,16 @@ class AuthenticatedSessionController extends Controller
 
     public function logout(Request $request)
     {
-        // Ensure user is authenticated and token exists
         if ($request->user()) {
             $request->user()->currentAccessToken()->delete();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
         }
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return response()->json(
+            [
+                'message' => trans('messages.logout_success'),
+            ]);
     }
 
 }

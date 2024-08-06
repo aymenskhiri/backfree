@@ -19,4 +19,10 @@ class Post extends Model
     {
         return $this->belongsTo(FreelancerProfile::class, 'freelancer_profile_id');
     }
+
+
+    public function scopeByFreelancer($query, $freelancerId)
+    {
+        return $query->where('freelancer_profile_id', $freelancerId);
+    }
 }
