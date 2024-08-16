@@ -26,7 +26,7 @@ class FreelancerRequest extends FormRequest
                 'bio' => 'nullable|string',
                 'skills' => 'nullable|string',
                 'hourly_price' => 'nullable|numeric',
-                'reviews' => 'nullable|integer',
+            'reviews' => 'integer|min:1|max:5',
         ];
     }
 }

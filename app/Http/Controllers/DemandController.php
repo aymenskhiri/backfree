@@ -47,10 +47,35 @@ class DemandController extends Controller
         }
     }
 
-    public function getDemandsByClient($clientId): JsonResponse
+    public function getDemandsByClient(Request $request, $clientId): JsonResponse
     {
         try {
-            $demands = Demand::where('client_id', $clientId)->get();
+            $query = Demand::where('client_id', $clientId);
+
+            // Search functionality
+            if ($search = $request->query('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('description', 'LIKE', "%{$search}%")
+                        ->orWhereDate('service_date', 'LIKE', "%{$search}%")
+                        ->orWhere('begin_hour', 'LIKE', "%{$search}%");
+                });
+            }
+
+            if ($approval = $request->query('approval')) {
+                $query->where('approuval', $approval);
+            }
+
+            if ($status = $request->query('status')) {
+                $query->where('status', $status);
+            }
+
+            if ($sortBy = $request->query('sort_by')) {
+                $sortDirection = $request->query('sort_direction', 'asc'); // Default to ascending order
+                $query->orderBy($sortBy, $sortDirection);
+            }
+
+            $demands = $query->with('freelancer.user:id,email,first_name,last_name,phone')->get();
+
             return response()->json($demands);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve demands for client: ' . $e->getMessage());
@@ -58,17 +83,27 @@ class DemandController extends Controller
         }
     }
 
+
     public function show($id): JsonResponse
     {
         $demand = Demand::findOrFail($id);
         return response()->json($demand);
     }
-    public function getDemandsByFreelancer($freelancerId): JsonResponse
+    public function getDemandsByFreelancer(Request $request, $freelancerId): JsonResponse
     {
         try {
-            $demands = Demand::where('freelancer_id', $freelancerId)
-                ->with('client.user:id,email,first_name,last_name,phone')
-                ->get();
+            $query = Demand::where('freelancer_id', $freelancerId);
+
+            if ($search = $request->query('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('description', 'LIKE', "%{$search}%")
+                        ->orWhereDate('service_date', 'LIKE', "%{$search}%")
+                        ->orWhere('begin_hour', 'LIKE', "%{$search}%");
+                });
+            }
+
+            $demands = $query->with('client.user:id,email,first_name,last_name,phone')->get();
+
             return response()->json($demands);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve demands for freelancer: ' . $e->getMessage());
@@ -76,21 +111,41 @@ class DemandController extends Controller
         }
     }
 
-    public function getDemandsByFreelancerApprouved($freelancerId): JsonResponse
+
+    public function getDemandsByFreelancerApprouved(Request $request, $freelancerId): JsonResponse
     {
         try {
-            $demands = Demand::where('freelancer_id', $freelancerId)
-                ->where('approuval', 'Accepted')
-                ->with('client.user:id,email,first_name,last_name,phone')
-                ->get();
+            
+            $query = Demand::where('freelancer_id', $freelancerId)
+                ->where('approuval', 'Accepted');
+
+            // Apply search filter
+            if ($search = $request->query('search')) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('description', 'LIKE', "%{$search}%")
+                        ->orWhereDate('service_date', 'LIKE', "%{$search}%")
+                        ->orWhere('begin_hour', 'LIKE', "%{$search}%");
+                });
+            }
+
+            if ($status = $request->query('status')) {
+                $query->where('status', $status);
+            }
+
+            $orderBy = $request->query('sort_by', 'service_date'); // default to 'service_date' if not provided
+            $orderDirection = $request->query('sort_direction', 'asc'); // default to 'asc' if not provided
+
+            $query->orderBy($orderBy, $orderDirection);
+
+
+            $demands = $query->with('client.user:id,email,first_name,last_name,phone')->get();
+
             return response()->json($demands);
         } catch (\Exception $e) {
             Log::error('Failed to retrieve demands for freelancer: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to retrieve demands'], Response::HTTP_BAD_REQUEST);
         }
     }
-
-
 
     public function updateStatus(UpdateDemandStatusRequest $request, $id): JsonResponse
     {
@@ -146,7 +201,7 @@ class DemandController extends Controller
     {
         try {
             $demand = Demand::findOrFail($id);
-            $demandData = $this->demandRepository->prepareDemandData($request);
+            $demandData = $request->only(['description', 'service_date', 'begin_hour']);
 
             $demand->update($demandData);
 
@@ -161,6 +216,7 @@ class DemandController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
     }
+
 
     public function destroy($id): JsonResponse
     {

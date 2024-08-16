@@ -24,4 +24,10 @@ class Demand extends Model
     {
         return $this->belongsTo(client::class);
     }
+
+    public function freelancer()
+    {
+        return $this->belongsTo(FreelancerProfile::class);
+    }
+
 }

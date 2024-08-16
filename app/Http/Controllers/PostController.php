@@ -21,11 +21,29 @@ class PostController extends Controller
     {
         $this->postRepository = $postRepository;
     }
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::with(['freelancerProfile.user'])->get();
+        $query = Post::with(['freelancerProfile.user']);
+
+        // Check if a search query parameter is provided
+        if ($search = $request->query('search')) {
+            $query->where('title', 'LIKE', "%{$search}%")
+                ->orWhere('description', 'LIKE', "%{$search}%");
+        }
+
+        if ($sortBy = $request->query('sort_by')) {
+            $sortOrder = $request->query('sort_order', 'asc'); // default to ascending order
+            if (in_array($sortBy, ['title', 'description']) && in_array($sortOrder, ['asc', 'desc'])) {
+                $query->orderBy($sortBy, $sortOrder);
+            }
+        }
+
+        $posts = $query->get();
+
         return response()->json($posts);
     }
+
+
 
     public function store(PostRequest $request): JsonResponse
     {
@@ -37,6 +55,7 @@ class PostController extends Controller
             }
 
             $postData = $this->postRepository->preparePostData($request, $imagePath);
+
             $post = Post::create($postData);
 
 
@@ -108,7 +127,6 @@ class PostController extends Controller
         try {
             $post = Post::findOrFail($id);
 
-            // Delete the image if it exists
             if ($post->image) {
                 Storage::delete('public/images/' . $post->image);
             }

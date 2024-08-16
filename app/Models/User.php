@@ -29,6 +29,7 @@ class User extends Authenticatable
         'password',
         'client_id',
         'freelancer_id',
+        'is_admin',
     ];
 
 
