@@ -88,4 +88,12 @@ Route::get('/clients/{clientId}/demands', [\App\Http\Controllers\DemandControlle
 Route::patch('demands/{id}/status', [\App\Http\Controllers\DemandController::class, 'updateStatus']);
 Route::patch('/demands/{id}/approuval', [\App\Http\Controllers\DemandController::class, 'updateApprouval']);
 
+//Conversations
+Route::post('/conversations/open', [\App\Http\Controllers\ConversationController::class, 'openConversation']);
+Route::post('/conversations/send-message', [\App\Http\Controllers\ConversationController::class, 'sendMessage']);
+Route::get('/conversations/{conversation}/messages', [\App\Http\Controllers\ConversationController::class, 'fetchMessages']);
 
+Route::get('/conversations/freelancer/{freelancerId}', [\App\Http\Controllers\ConversationController::class, 'fetchConversationsByFreelancer']);
+Route::get('/conversations/{id}', [ConversationController::class, 'show']);
+Route::get('/conversations/{conversationId}/messages', [ConversationController::class, 'fetchMessages']);
+Route::post('/conversations/{conversationId}/messages', [ConversationController::class, 'sendMessage']);

@@ -7,7 +7,7 @@ class DemandRepository
     public function prepareDemandData($request): array
     {
         return [
-            'status' => $request->input('status'),
+            'status' => $request->input('status', 'On Hold'), // Default status if not provided
             'approuval' => $request->input('approuval', 'On Hold'),
             'service_date' => $request->input('service_date'),
             'description' => $request->input('description'),
@@ -15,7 +15,7 @@ class DemandRepository
             'freelancer_id' => $request->input('freelancer_id'),
             'client_id' => $request->input('client_id'),
             'begin_hour' => $request->input('begin_hour'),
-
         ];
     }
+
 }

@@ -115,7 +115,7 @@ class DemandController extends Controller
     public function getDemandsByFreelancerApprouved(Request $request, $freelancerId): JsonResponse
     {
         try {
-            
+
             $query = Demand::where('freelancer_id', $freelancerId)
                 ->where('approuval', 'Accepted');
 

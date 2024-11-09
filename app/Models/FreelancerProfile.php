@@ -9,7 +9,7 @@ class FreelancerProfile extends Model
 {
     use HasFactory;
 
-
+    protected $table = 'freelancer_profiles';
     protected $fillable = [
         'user_id',
         'bio',
