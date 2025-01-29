@@ -49,6 +49,36 @@ class ConversationController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
+
+    public function index(Request $request)
+    {
+        $freelancerId = $request->query('freelancer_id');
+        if (!$freelancerId) {
+            return response()->json(['message' => 'Freelancer ID is required'], 400);
+        }
+
+        $conversations = Conversation::where('freelancer_id', $freelancerId)->get();
+
+        if ($conversations->isEmpty()) {
+            return response()->json(['message' => 'No conversations found'], 404);
+        }
+
+        return response()->json($conversations);
+    }
+
+    public function show($id)
+    {
+        // Fetch the conversation by ID
+        $conversation = Conversation::find($id);
+
+        // Check if the conversation exists
+        if (!$conversation) {
+            return response()->json(['message' => 'Conversation not found'], 404);
+        }
+
+        return response()->json($conversation, 200);
+    }
+
     public function sendMessage(Request $request)
     {
         $request->validate([

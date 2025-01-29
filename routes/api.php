@@ -94,6 +94,8 @@ Route::post('/conversations/send-message', [\App\Http\Controllers\ConversationCo
 Route::get('/conversations/{conversation}/messages', [\App\Http\Controllers\ConversationController::class, 'fetchMessages']);
 
 Route::get('/conversations/freelancer/{freelancerId}', [\App\Http\Controllers\ConversationController::class, 'fetchConversationsByFreelancer']);
-Route::get('/conversations/{id}', [ConversationController::class, 'show']);
-Route::get('/conversations/{conversationId}/messages', [ConversationController::class, 'fetchMessages']);
-Route::post('/conversations/{conversationId}/messages', [ConversationController::class, 'sendMessage']);
+Route::get('/conversations/{id}', [\App\Http\Controllers\ConversationController::class, 'show']);
+Route::get('/conversations/{conversationId}/messages', [\App\Http\Controllers\ConversationController::class, 'fetchMessages']);
+Route::post('/conversations/{conversationId}/messages', [\App\Http\Controllers\ConversationController::class, 'sendMessage']);
+Route::get('/conversations/{id}', [\App\Http\Controllers\ConversationController::class, 'show']);
+Route::get('/conversations', [\App\Http\Controllers\ConversationController::class, 'index']);
